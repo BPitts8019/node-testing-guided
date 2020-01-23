@@ -1,29 +1,38 @@
 const db = require("../data/config")
+const hobbits_db = db.bind(db, "hobbits");
 
 function list() {
-  return db("hobbits")
+   return db("hobbits")
 }
 
 function findById(id) {
-  return null
+   return hobbits_db()
+      .where({id})
+      .first();
 }
 
-function insert(hobbit) {
-  return null
+async function insert(hobbit) {
+   const [id] = await hobbits_db().insert(hobbit);
+   return findById(id);
 }
 
-function update(id, changes) {
-  return null
+async function update(id, changes) {
+   const numFiles = await hobbits_db()
+      .update(changes)
+      .where({id});
+   return findById(id);
 }
 
 function remove(id) {
-  return null
+   return hobbits_db()
+      .del()
+      .where({id});
 }
 
 module.exports = {
-  list,
-  findById,
-  insert,
-  update,
-  remove,
+   list,
+   findById,
+   insert,
+   update,
+   remove,
 }
